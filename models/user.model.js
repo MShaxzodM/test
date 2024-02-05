@@ -52,7 +52,6 @@ const UserCredentials = sequelize.define("user_credentials", {
     },
 });
 (() => __awaiter(void 0, void 0, void 0, function* () {
-    //   await sequelize.sync({ force: true });
-    // Code here
+    yield sequelize.sync({ force: true });
 }))();
 export { UserModel, UserCredentials };

@@ -49,8 +49,7 @@ const UserCredentials = sequelize.define("user_credentials", {
 });
 
 (async () => {
-//   await sequelize.sync({ force: true });
-  // Code here
+  await sequelize.sync({ force: true });
 })();
 
 export {UserModel,UserCredentials}
