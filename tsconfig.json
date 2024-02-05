@@ -2,5 +2,7 @@
     "compilerOptions": {
       "allowJs": true,
       "esModuleInterop":true,
+      "moduleResolution": "Node",
+      "target":"ES6"
     }
   }
