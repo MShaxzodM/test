@@ -15,14 +15,16 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.cache = void 0;
 var nodemailer = require('nodemailer');
 const googleapis_1 = require("googleapis");
+const dotenv_1 = require("dotenv");
+(0, dotenv_1.config)();
 const node_cache_1 = __importDefault(require("node-cache"));
 const cache = new node_cache_1.default();
 exports.cache = cache;
 const smsaero_1 = require("smsaero");
-const CLIENT_ID = '1068897745407-4m9hcuvgr8bp05v6n81k4j2tthf47out.apps.googleusercontent.com';
-const secretkey = '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';
+const CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
+const secretkey = process.env.GOOGLE_SECRET_KEY;
 const redirect = 'https://developers.google.com/oauthplayground';
-const token = '1//04uXwzPl7Ahj4CgYIARAAGAQSNwF-L9IrmZ5Z35ei7YYVgckPRYuYi8exJATUGmawBkgRMV3G3vgm751D9a40UezmH7TLaqCsWE4';
+const token = process.env.GOOGLE_TOKEN;
 const oauthclient = new googleapis_1.google.auth.OAuth2(CLIENT_ID, secretkey, redirect);
 oauthclient.setCredentials({ refresh_token: token });
 const accessToken = oauthclient.getAccessToken();
@@ -39,7 +41,7 @@ var transporter = nodemailer.createTransport({
         accessToken
     }
 });
-const smsSender = new smsaero_1.SmsAero('mshaxzodm@gmail.com ', 'dr8hR198L3L9i8_e2Xi9Na_GmFey3Nnb');
+const smsSender = new smsaero_1.SmsAero('mshaxzodm@gmail.com ', process.env.SMS_CODE);
 class CodeSender {
     static sendMail(mail) {
         return __awaiter(this, void 0, void 0, function* () {

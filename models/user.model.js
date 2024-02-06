@@ -11,7 +11,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.UserCredentials = exports.UserModel = void 0;
 const { Sequelize, Model, DataTypes } = require("sequelize");
-const sequelize = new Sequelize("test", "postgres", '1234', {
+const dotenv_1 = require("dotenv");
+(0, dotenv_1.config)();
+const sequelize = new Sequelize("test", "postgres", process.env.POSTGRES_PASSWORD, {
     port: 5432,
     host: "localhost",
     dialect: "postgres",

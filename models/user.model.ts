@@ -1,8 +1,10 @@
 const { Sequelize, Model, DataTypes } = require("sequelize");
+import { config } from "dotenv";
+config()
 const sequelize = new Sequelize(
     "test",
     "postgres",
-    '1234',
+    process.env.POSTGRES_PASSWORD,
     {
         port: 5432,
         host: "localhost",

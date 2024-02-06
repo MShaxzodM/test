@@ -1,13 +1,15 @@
 var nodemailer = require('nodemailer');
 import { google } from 'googleapis';
+import { config } from 'dotenv';
+config()
 import NodeCache from 'node-cache';
 const cache = new NodeCache()
 export {cache}
 import { SmsAero } from 'smsaero';
-const CLIENT_ID = '1068897745407-4m9hcuvgr8bp05v6n81k4j2tthf47out.apps.googleusercontent.com'
-const secretkey = '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'
+const CLIENT_ID = process.env.GOOGLE_CLIENT_ID
+const secretkey = process.env.GOOGLE_SECRET_KEY
 const redirect = 'https://developers.google.com/oauthplayground'
-const token = '1//04uXwzPl7Ahj4CgYIARAAGAQSNwF-L9IrmZ5Z35ei7YYVgckPRYuYi8exJATUGmawBkgRMV3G3vgm751D9a40UezmH7TLaqCsWE4'
+const token = process.env.GOOGLE_TOKEN
 const oauthclient = new google.auth.OAuth2(CLIENT_ID,secretkey,redirect)
 
 oauthclient.setCredentials({refresh_token:token})
@@ -28,7 +30,7 @@ var transporter = nodemailer.createTransport({
   }
 });
 
-const smsSender = new SmsAero('mshaxzodm@gmail.com ', 'dr8hR198L3L9i8_e2Xi9Na_GmFey3Nnb');
+const smsSender = new SmsAero('mshaxzodm@gmail.com ',process.env.SMS_CODE );
 
 export default class CodeSender{
     static async sendMail(mail:String):Promise<any>{
