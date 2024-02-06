@@ -1,3 +1,27 @@
+"use strict";
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -7,17 +31,21 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-import UserService from '../services/user.service';
-import SessionService from '../services/session.service';
-import CodeSender, { cache } from '../services/codesender.service';
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const user_service_1 = __importDefault(require("../services/user.service"));
+const session_service_1 = __importDefault(require("../services/session.service"));
+const codesender_service_1 = __importStar(require("../services/codesender.service"));
 class UserController {
     static EntryPoint(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            if (UserService.FindOne("phone", req.body.credentials.phone) || UserService.FindOne("email", req.body.credentials.email) || UserService.FindOne("username", req.body.credentials.username)) {
+            if (user_service_1.default.FindOne("phone", req.body.credentials.phone) || user_service_1.default.FindOne("email", req.body.credentials.email) || user_service_1.default.FindOne("username", req.body.credentials.username)) {
                 res.send('User with this email or phone number is already exists');
             }
-            else if (CodeSender.sendMail(req.body.credentials.email) && CodeSender.SendSms(req.body.credentials.phone)) {
-                cache.set('userdata', req.body);
+            else if (codesender_service_1.default.sendMail(req.body.credentials.email) && codesender_service_1.default.SendSms(req.body.credentials.phone)) {
+                codesender_service_1.cache.set('userdata', req.body);
                 res.send('You are good to go');
             }
             else {
@@ -28,8 +56,8 @@ class UserController {
     static Create(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             //need to confirm phone number before creation
-            if (SessionService.Confirm(req)) {
-                const user_id = yield UserService.Create(cache.get('userdata'));
+            if (session_service_1.default.Confirm(req)) {
+                const user_id = yield user_service_1.default.Create(codesender_service_1.cache.get('userdata'));
                 req.session.authenticated = true,
                     req.session.user_id = user_id;
                 return res.send({ user_id });
@@ -41,7 +69,7 @@ class UserController {
     static GetUser(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             if (req.session.authenticated) {
-                const userData = yield UserService.GetById(req.session.user_id);
+                const userData = yield user_service_1.default.GetById(req.session.user_id);
                 res.send(userData);
             }
             else {
@@ -50,4 +78,4 @@ class UserController {
         });
     }
 }
-export default UserController;
+exports.default = UserController;

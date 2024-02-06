@@ -1,3 +1,4 @@
+"use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -7,6 +8,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.UserCredentials = exports.UserModel = void 0;
 const { Sequelize, Model, DataTypes } = require("sequelize");
 const sequelize = new Sequelize("test", "postgres", '1234', {
     port: 5432,
@@ -27,6 +30,7 @@ const UserModel = sequelize.define("users", {
         allowNull: false,
     },
 });
+exports.UserModel = UserModel;
 // Create database object
 const UserCredentials = sequelize.define("user_credentials", {
     user_id: {
@@ -51,7 +55,7 @@ const UserCredentials = sequelize.define("user_credentials", {
         allowNull: false,
     },
 });
+exports.UserCredentials = UserCredentials;
 (() => __awaiter(void 0, void 0, void 0, function* () {
     yield sequelize.sync({ force: true });
 }))();
-export { UserModel, UserCredentials };

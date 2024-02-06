@@ -1,3 +1,4 @@
+"use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -7,19 +8,23 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-import SessionService from "../services/session.service";
-import UserService from "../services/user.service";
-import CodeSender from "../services/codesender.service";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const session_service_1 = __importDefault(require("../services/session.service"));
+const user_service_1 = __importDefault(require("../services/user.service"));
+const codesender_service_1 = __importDefault(require("../services/codesender.service"));
 class AuthController {
     static entryPoint(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             if (req.body.AUTH_TYPE === 'phone' && req.body.phone) {
                 req.session.regenerate;
                 req.session.AUTH_TYPE = "phone";
-                const user = yield UserService.FindOne("phone", req.body.phone);
+                const user = yield user_service_1.default.FindOne("phone", req.body.phone);
                 if (user) {
                     req.session.user_id = user.user_id;
-                    const sms = yield CodeSender.SendSms(req.body.phone);
+                    const sms = yield codesender_service_1.default.SendSms(req.body.phone);
                     return res.send("SMS sent");
                 }
                 else {
@@ -29,10 +34,10 @@ class AuthController {
             else if (req.body.AUTH_TYPE === 'mail' && req.body.email) {
                 req.session.regenerate;
                 req.session.AUTH_TYPE = "mail";
-                const user = yield UserService.FindOne("email", req.body.email);
+                const user = yield user_service_1.default.FindOne("email", req.body.email);
                 if (user) {
                     req.session.user_id = user.user_id;
-                    const mail = yield CodeSender.sendMail(req.body.email);
+                    const mail = yield codesender_service_1.default.sendMail(req.body.email);
                     return res.send('Mail sent');
                 }
                 else {
@@ -42,7 +47,7 @@ class AuthController {
             else if (req.body.AUTH_TYPE === 'password' && req.body.username) {
                 req.session.regenerate;
                 req.session.AUTH_TYPE = "password";
-                const user = yield UserService.FindOne("username", req.body.username);
+                const user = yield user_service_1.default.FindOne("username", req.body.username);
                 if (user) {
                     req.session.user_id = user.user_id;
                     res.send("user found");
@@ -58,9 +63,9 @@ class AuthController {
     }
     static login(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            yield SessionService.Auth(req);
+            yield session_service_1.default.Auth(req);
             if (req.session.authenticated) {
-                const data = yield UserService.GetById(req.session.user_id);
+                const data = yield user_service_1.default.GetById(req.session.user_id);
                 return res.send(data);
             }
             else {
@@ -69,4 +74,4 @@ class AuthController {
         });
     }
 }
-export default AuthController;
+exports.default = AuthController;

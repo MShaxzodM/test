@@ -1,3 +1,4 @@
+"use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -7,17 +8,22 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.cache = void 0;
 var nodemailer = require('nodemailer');
-import { google } from 'googleapis';
-import NodeCache from 'node-cache';
-const cache = new NodeCache();
-export { cache };
-import { SmsAero } from 'smsaero';
+const googleapis_1 = require("googleapis");
+const node_cache_1 = __importDefault(require("node-cache"));
+const cache = new node_cache_1.default();
+exports.cache = cache;
+const smsaero_1 = require("smsaero");
 const CLIENT_ID = '1068897745407-4m9hcuvgr8bp05v6n81k4j2tthf47out.apps.googleusercontent.com';
 const secretkey = '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';
 const redirect = 'https://developers.google.com/oauthplayground';
 const token = '1//04uXwzPl7Ahj4CgYIARAAGAQSNwF-L9IrmZ5Z35ei7YYVgckPRYuYi8exJATUGmawBkgRMV3G3vgm751D9a40UezmH7TLaqCsWE4';
-const oauthclient = new google.auth.OAuth2(CLIENT_ID, secretkey, redirect);
+const oauthclient = new googleapis_1.google.auth.OAuth2(CLIENT_ID, secretkey, redirect);
 oauthclient.setCredentials({ refresh_token: token });
 const accessToken = oauthclient.getAccessToken();
 var transporter = nodemailer.createTransport({
@@ -33,8 +39,8 @@ var transporter = nodemailer.createTransport({
         accessToken
     }
 });
-const smsSender = new SmsAero('mshaxzodm@gmail.com ', 'dr8hR198L3L9i8_e2Xi9Na_GmFey3Nnb');
-export default class CodeSender {
+const smsSender = new smsaero_1.SmsAero('mshaxzodm@gmail.com ', 'dr8hR198L3L9i8_e2Xi9Na_GmFey3Nnb');
+class CodeSender {
     static sendMail(mail) {
         return __awaiter(this, void 0, void 0, function* () {
             const random = Math.floor(Math.random() * (9999 - 1000 + 1) + 1000);
@@ -73,3 +79,4 @@ export default class CodeSender {
         });
     }
 }
+exports.default = CodeSender;
