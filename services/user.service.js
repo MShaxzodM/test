@@ -30,6 +30,7 @@ class UserService {
             const user = yield user_model_1.UserCredentials.findOne({
                 where: { [key]: value }
             });
+            console.log(user);
             if (user) {
                 return user;
             }

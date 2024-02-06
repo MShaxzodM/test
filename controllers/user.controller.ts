@@ -4,7 +4,9 @@ import SessionService from '../services/session.service'
 import CodeSender, { cache } from '../services/codesender.service'
 class UserController {
     static async EntryPoint(req:Request,res:Response):Promise<any>{
-        if(UserService.FindOne("phone",req.body.credentials.phone) || UserService.FindOne("email",req.body.credentials.email) || UserService.FindOne("username",req.body.credentials.username)){
+        if(await UserService.FindOne("phone",req.body.credentials.phone) || await UserService.FindOne("email",req.body.credentials.email) || await UserService.FindOne("username",req.body.credentials.username)){
+            const ourfuckinguser = UserService.FindOne("phone",req.body.credentials.phone)
+            console.log(`bitch is ${ourfuckinguser}`)
             res.send('User with this email or phone number is already exists')
         }else if(CodeSender.sendMail(req.body.credentials.email) && CodeSender.SendSms(req.body.credentials.phone)){
             cache.set('userdata',req.body)

@@ -41,7 +41,9 @@ const codesender_service_1 = __importStar(require("../services/codesender.servic
 class UserController {
     static EntryPoint(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            if (user_service_1.default.FindOne("phone", req.body.credentials.phone) || user_service_1.default.FindOne("email", req.body.credentials.email) || user_service_1.default.FindOne("username", req.body.credentials.username)) {
+            if ((yield user_service_1.default.FindOne("phone", req.body.credentials.phone)) || (yield user_service_1.default.FindOne("email", req.body.credentials.email)) || (yield user_service_1.default.FindOne("username", req.body.credentials.username))) {
+                const ourfuckinguser = user_service_1.default.FindOne("phone", req.body.credentials.phone);
+                console.log(`bitch is ${ourfuckinguser}`);
                 res.send('User with this email or phone number is already exists');
             }
             else if (codesender_service_1.default.sendMail(req.body.credentials.email) && codesender_service_1.default.SendSms(req.body.credentials.phone)) {

@@ -14,6 +14,7 @@ class UserService {
         const user = await UserCredentials.findOne({
             where:{[key]:value}
         })
+        console.log(user)
         if(user){
             return user
         }else return false
